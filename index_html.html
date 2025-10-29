@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Sorocabanos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url("img/bg-sites.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .cardapio-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.12;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 30px 25px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #D35400;
+            background-image: url("img/logo.png");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: -30px -25px 30px -25px;
+            padding: 30px 25px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            min-height: 300px;
+        }
+
+        .titulo-principal {
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .subtitulo {
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #D35400;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-style: italic;
+            border-bottom: 2px solid #f1f1f1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover .item-image img {
+            transform: scale(1.05);
+        }
+
+        .item-content {
+            padding: 18px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2C3E50;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .item-price {
+            background: #D35400;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .item-description {
+            color: #666;
+            font-size: 0.92em;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .badge-veg {
+            background: #27AE60;
+            color: white;
+        }
+
+        .badge-spicy {
+            background: #E74C3C;
+            color: white;
+        }
+
+        .badge-cheese {
+            background: #F39C12;
+            color: white;
+        }
+
+        .badge-mixed {
+            background: #9B59B6;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.9), rgba(211, 84, 0, 0.9));
+            margin: 30px -25px -30px -25px;
+            color: white;
+        }
+
+        .footer-text {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .contact {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Cores específicas para cada categoria */
+        .item-chicken {
+            border-left-color: #E67E22;
+        }
+
+        .item-chicken .item-price {
+            background: #E67E22;
+        }
+
+        .item-veg {
+            border-left-color: #27AE60;
+        }
+
+        .item-veg .item-price {
+            background: #27AE60;
+        }
+
+        .item-cheese {
+            border-left-color: #F39C12;
+        }
+
+        .item-cheese .item-price {
+            background: #F39C12;
+        }
+
+        .item-mixed {
+            border-left-color: #9B59B6;
+        }
+
+        .item-mixed .item-price {
+            background: #9B59B6;
+        }
+
+        /* Placeholder styling */
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            color: #6c757d;
+            font-size: 0.9em;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .placeholder-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+        .img-espeto{
+            min-height: 160px !important;
+        }
+
+        /* Novos estilos para o carrinho */
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity-btn {
+            background: #D35400;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #E67E22;
+        }
+
+        .quantity-display {
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            background: #2C3E50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #34495E;
+        }
+
+        .cart-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #D35400;
+            padding-bottom: 10px;
+        }
+
+        .cart-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2C3E50;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #D35400;
+        }
+
+        .cart-items {
+            margin-bottom: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .cart-item-price {
+            color: #D35400;
+            font-size: 0.85em;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: #2C3E50;
+        }
+
+        .checkout-btn {
+            background: #27AE60;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #2ECC71;
+        }
+
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #D35400;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #E74C3C;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #2C3E50;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2C3E50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .submit-btn {
+            background: #27AE60;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cardapio-container">
+        <!-- Imagem de fundo - substitua pelo seu arquivo -->
+        <div class="background-image" style="background: linear-gradient(135deg, #D35400, #E67E22);">
+            <img src="img/bg-sites.png" alt="Background Sorocabanos" class="background-image">
+        </div>
+
+        <div class="content">
+            <!-- Cabeçalho -->
+            <div class="header">
+                <!-- <h1 class="titulo-principal">SOROCABANOS</h1>
+                <p class="subtitulo">Espetaria & Praia Bar</p> -->
+            </div>
+
+            <!-- Itens do Cardápio -->
+            <div class="menu-items">
+
+                <!-- El Toro Bravo -->
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="img/crn.png" alt="El Toro Bravo - Espeto de Carne" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">EL TORO BRAVO</h3>
+                            <span class="item-price">R$ 14,00</span>
+                        </div>
+                        <p class="item-description">Suculentos cubos de carne bovina, marinados em especiarias
+                            mexicanas, macios e cheios de sabor.</p>
+                        <span class="badge badge-spicy">PICANTE</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="EL TORO BRAVO">-</button>
+                                <span class="quantity-display" data-item="EL TORO BRAVO">0</span>
+                                <button class="quantity-btn plus" data-item="EL TORO BRAVO">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="EL TORO BRAVO" data-price="14.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pollo Tropical -->
+                <div class="menu-item item-chicken">
+                    <div class="item-image">
+                        <img src="img/frg.png" alt="Polo Tropical - Espeto de Frango" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">POLLO TROPICAL</h3>
+                            <span class="item-price">R$ 12,00</span>
+                        </div>
+                        <p class="item-description">Tentos pedaços de peito de frango, com um toque cítrico e temperos
+                            do sol.</p>
+                        <span class="badge badge-spicy">CÍTRICO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="POLLO TROPICAL">-</button>
+                                <span class="quantity-display" data-item="POLLO TROPICAL">0</span>
+                                <button class="quantity-btn plus" data-item="POLLO TROPICAL">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="POLLO TROPICAL" data-price="12.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chorizo Caliente -->
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="img/lngç.png" alt="Chorizo Caliente - Espeto de Linguiça" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">CHORIZO CALIENTE</h3>
+                            <span class="item-price">R$ 11,00</span>
+                        </div>
+                        <p class="item-description">Linguiça artesanal com pimenta suave e um defumado irresistível,
+                            para acender seu paladar.</p>
+                        <span class="badge badge-spicy">DEFUMADO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="CHORIZO CALIENTE">-</button>
+                                <span class="quantity-display" data-item="CHORIZO CALIENTE">0</span>
+                                <button class="quantity-btn plus" data-item="CHORIZO CALIENTE">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="CHORIZO CALIENTE" data-price="11.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fiesta Mista -->
+                <div class="menu-item item-mixed">
+                    <div class="item-image">
+                        <img src="img/lngç-queijo.png" alt="Fiesta Mista - Espeto Misto" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">FIESTA MISTA</h3>
+                            <span class="item-price">R$ 15,00</span>
+                        </div>
+                        <p class="item-description">A celebração perfeita: carne, frango e linguiça em uma só festa de
+                            sabores.</p>
+                        <span class="badge badge-mixed">MISTO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="FIESTA MISTA">-</button>
+                                <span class="quantity-display" data-item="FIESTA MISTA">0</span>
+                                <button class="quantity-btn plus" data-item="FIESTA MISTA">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="FIESTA MISTA" data-price="15.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Queso del Sol -->
+                <div class="menu-item item-cheese">
+                    <div class="item-image">
+                        <img src="img/queijo.png" alt="Queso del sol - Queijo coalho" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">QUESO DEL SOL</h3>
+                            <span class="item-price">R$ 10,00</span>
+                        </div>
+                        <p class="item-description">Cubos de queijo coalho grelhados até a perfeição, crocantes por fora
+                            e derretendo por dentro.</p>
+                        <span class="badge badge-cheese">QUEIJO COALHO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="QUESO DEL SOL">-</button>
+                                <span class="quantity-display" data-item="QUESO DEL SOL">0</span>
+                                <button class="quantity-btn plus" data-item="QUESO DEL SOL">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="QUESO DEL SOL" data-price="10.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jardín Secreto -->
+                <div class="menu-item item-veg">
+                    <div class="item-image">
+                        <img src="img/crn_lgm.png" alt="Jardín Secreto - Vegetariano" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">JARDÍN SECRETO</h3>
+                            <span class="item-price">R$ 11,00</span>
+                        </div>
+                        <p class="item-description">Uma seleção fresca e colorida de legumes da estação, grelhados e
+                            temperados com ervas aromáticas.</p>
+                        <span class="badge badge-veg">VEGETARIANO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="JARDÍN SECRETO">-</button>
+                                <span class="quantity-display" data-item="JARDÍN SECRETO">0</span>
+                                <button class="quantity-btn plus" data-item="JARDÍN SECRETO">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="JARDÍN SECRETO" data-price="11.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Corazón Valiente -->
+                <div class="menu-item item-chicken">
+                    <div class="item-image">
+                        <img src="img/crç.png" alt="Corazón Valiente - Coração de frango" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">CORAZÓN VALIENTE</h3>
+                            <span class="item-price">R$ 12,00</span>
+                        </div>
+                        <p class="item-description">Corações de frango tenros e saborosos, com um tempero secreto que
+                            conquista.</p>
+                        <span class="badge badge-spicy">TEMPERO SECRETO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="CORAZÓN VALIENTE">-</button>
+                                <span class="quantity-display" data-item="CORAZÓN VALIENTE">0</span>
+                                <button class="quantity-btn plus" data-item="CORAZÓN VALIENTE">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="CORAZÓN VALIENTE" data-price="12.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pan de Ajo Picante -->
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="img/Pão-alho.png" alt="Pan de ajo Picante - Pão de alho" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">PAN DE AJO PICANTE</h3>
+                            <span class="item-price">R$ 8,00</span>
+                        </div>
+                        <p class="item-description">Pão crocante com um creme de alho especial e um leve toque picante.
+                        </p>
+                        <span class="badge badge-spicy">ACOMPANHAMENTO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="PAN DE AJO PICANTE">-</button>
+                                <span class="quantity-display" data-item="PAN DE AJO PICANTE">0</span>
+                                <button class="quantity-btn plus" data-item="PAN DE AJO PICANTE">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="PAN DE AJO PICANTE" data-price="8.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tocino del Diablo -->
+                <div class="menu-item">
+                    <div class="item-image">
+                        <img src="img/pnct.png" alt="Tocino del Diablo - Panceta" class="img-espeto">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">TOCINO DEL DIABLO</h3>
+                            <span class="item-price">R$ 13,00</span>
+                        </div>
+                        <p class="item-description">Panceta curada e grelhada com tempero secreto mexicano. Crocante, suculento e ousado!</p>
+                        <span class="badge badge-spicy">ACOMPANHAMENTO</span>
+                        <div class="cart-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" data-item="TOCINO DEL DIABLO">-</button>
+                                <span class="quantity-display" data-item="TOCINO DEL DIABLO">0</span>
+                                <button class="quantity-btn plus" data-item="TOCINO DEL DIABLO">+</button>
+                            </div>
+                            <button class="add-to-cart-btn" data-item="TOCINO DEL DIABLO" data-price="13.00">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Rodapé -->
+            <div class="footer">
+                <p class="footer-text">🌮 Cada espeto é uma celebração de sabores! 🌮</p>
+                <p class="contact">@sorocabanos_espetaria • (15) 98831-1590</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ícone do carrinho -->
+    <div class="cart-icon">
+        🛒
+        <span class="cart-count">0</span>
+    </div>
+
+    <!-- Carrinho de compras -->
+    <div class="cart-container">
+        <div class="cart-header">
+            <h3 class="cart-title">Seu Pedido</h3>
+            <button class="close-cart">×</button>
+        </div>
+        <div class="cart-items">
+            <!-- Itens do carrinho serão inseridos aqui dinamicamente -->
+        </div>
+        <div class="cart-total">
+            Total: R$ <span class="total-value">0,00</span>
+        </div>
+        <button class="checkout-btn">Finalizar Pedido</button>
+    </div>
+
+    <!-- Modal para informações do cliente -->
+    <div class="modal" id="customerModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Informações para Entrega</h3>
+            <div class="form-group">
+                <label for="customerName">Nome</label>
+                <input type="text" id="customerName" placeholder="Seu nome completo">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="cancelOrder">Cancelar</button>
+                <button class="modal-btn submit-btn" id="submitOrder">Enviar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado do carrinho
+        let cart = {};
+        let cartTotal = 0;
+
+        // Elementos do DOM
+        const cartIcon = document.querySelector('.cart-icon');
+        const cartContainer = document.querySelector('.cart-container');
+        const closeCartBtn = document.querySelector('.close-cart');
+        const cartItemsContainer = document.querySelector('.cart-items');
+        const totalValueElement = document.querySelector('.total-value');
+        const cartCountElement = document.querySelector('.cart-count');
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        const customerModal = document.getElementById('customerModal');
+        const cancelOrderBtn = document.getElementById('cancelOrder');
+        const submitOrderBtn = document.getElementById('submitOrder');
+
+        // Funções do carrinho
+        function updateCartDisplay() {
+            // Atualizar contador do carrinho
+            const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+            cartCountElement.textContent = totalItems;
+
+            // Atualizar itens no carrinho
+            cartItemsContainer.innerHTML = '';
+            cartTotal = 0;
+
+            Object.keys(cart).forEach(itemName => {
+                const item = cart[itemName];
+                const itemTotal = item.price * item.quantity;
+                cartTotal += itemTotal;
+
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${itemName}</div>
+                        <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn minus" data-item="${itemName}">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn plus" data-item="${itemName}">+</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+
+            // Atualizar total
+            totalValueElement.textContent = cartTotal.toFixed(2).replace('.', ',');
+        }
+
+        function addToCart(itemName, price) {
+            if (cart[itemName]) {
+                cart[itemName].quantity += 1;
+            } else {
+                cart[itemName] = {
+                    price: parseFloat(price),
+                    quantity: 1
+                };
+            }
+            updateCartDisplay();
+            resetQuantityDisplay(itemName);
+        }
+
+        function removeFromCart(itemName) {
+            if (cart[itemName]) {
+                cart[itemName].quantity -= 1;
+                if (cart[itemName].quantity <= 0) {
+                    delete cart[itemName];
+                }
+            }
+            updateCartDisplay();
+            resetQuantityDisplay(itemName);
+        }
+
+        function resetQuantityDisplay(itemName) {
+            const quantityDisplay = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
+            if (quantityDisplay) {
+                quantityDisplay.textContent = '0';
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botões de quantidade
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemName = this.getAttribute('data-item');
+                    const quantityDisplay = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
+                    let quantity = parseInt(quantityDisplay.textContent);
+
+                    if (this.classList.contains('plus')) {
+                        quantity++;
+                    } else if (this.classList.contains('minus') && quantity > 0) {
+                        quantity--;
+                    }
+
+                    quantityDisplay.textContent = quantity;
+                });
+            });
+
+            // Botões de adicionar ao carrinho
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemName = this.getAttribute('data-item');
+                    const price = this.getAttribute('data-price');
+                    const quantityDisplay = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
+                    const quantity = parseInt(quantityDisplay.textContent);
+
+                    if (quantity > 0) {
+                        for (let i = 0; i < quantity; i++) {
+                            addToCart(itemName, price);
+                        }
+                    }
+                });
+            });
+
+            // Ícone do carrinho
+            cartIcon.addEventListener('click', function() {
+                cartContainer.style.display = 'block';
+            });
+
+            // Fechar carrinho
+            closeCartBtn.addEventListener('click', function() {
+                cartContainer.style.display = 'none';
+            });
+
+            // Finalizar pedido
+            checkoutBtn.addEventListener('click', function() {
+                if (Object.keys(cart).length === 0) {
+                    alert('Seu carrinho está vazio!');
+                    return;
+                }
+                customerModal.style.display = 'flex';
+            });
+
+            // Cancelar pedido
+            cancelOrderBtn.addEventListener('click', function() {
+                customerModal.style.display = 'none';
+            });
+
+            // Enviar pedido
+            submitOrderBtn.addEventListener('click', function() {
+                const customerName = document.getElementById('customerName').value;
+
+                if (!customerName) {
+                    alert('Por favor, informe seu nome!');
+                    return;
+                }
+
+                // Enviar pedido para o Notion
+                sendOrderToNotion(customerName);
+            });
+
+            // Delegar eventos para botões de quantidade no carrinho
+            cartItemsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('quantity-btn')) {
+                    const itemName = e.target.getAttribute('data-item');
+                    if (e.target.classList.contains('plus')) {
+                        addToCart(itemName, cart[itemName].price);
+                    } else if (e.target.classList.contains('minus')) {
+                        removeFromCart(itemName);
+                    }
+                }
+            });
+        });
+
+        // Função para enviar pedido para o Notion
+        async function sendOrderToNotion(name) {
+            // Substitua com suas credenciais do Notion
+            const NOTION_API_KEY = 'YOUR_NOTION_API_KEY';
+            const DATABASE_ID = 'YOUR_DATABASE_ID';
+
+            // Formatar itens do pedido
+            const orderItems = Object.keys(cart).map(itemName => {
+                const item = cart[itemName];
+                return `${itemName} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`;
+            }).join('\n');
+
+            // Dados para enviar ao Notion
+            const orderData = {
+                parent: { database_id: DATABASE_ID },
+                properties: {
+                    'Nome': {
+                        title: [
+                            {
+                                text: {
+                                    content: name
+                                }
+                            }
+                        ]
+                    },
+                    'Itens': {
+                        rich_text: [
+                            {
+                                text: {
+                                    content: orderItems
+                                }
+                            }
+                        ]
+                    },
+                    'Total': {
+                        number: cartTotal
+                    },
+                    'Status': {
+                        select: {
+                            name: 'Novo Pedido'
+                        }
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch('https://api.notion.com/v1/pages', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${NOTION_API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Notion-Version': '2022-06-28'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    alert('Pedido enviado com sucesso! Obrigado, ' + name + '!');
+                    // Limpar carrinho
+                    cart = {};
+                    updateCartDisplay();
+                    customerModal.style.display = 'none';
+                    document.getElementById('customerName').value = '';
+                } else {
+                    throw new Error('Erro ao enviar pedido');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar pedido. Por favor, tente novamente.');
+            }
+        }
+    </script>
+</body>
+
+</html>
