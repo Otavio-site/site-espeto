@@ -5,27 +5,436 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Cardápio Sorocabanos</title>
 <style>
-/* (estilos idênticos aos anteriores — mantive só os essenciais para compactar) */
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;background-image:url("img/bg-sites.png");background-size:cover;background-position:center;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px} .cardapio-container{position:relative;width:100%;max-width:450px;background:rgba(255,255,255,.95);border-radius:25px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.4)} .background-image{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.12;z-index:1} .content{position:relative;z-index:2;padding:30px 25px} .header{min-height:120px;background-image:url("img/logo.png");background-position:center;background-size:cover;margin:-30px -25px 30px -25px;padding:30px 25px;color:#fff;border-bottom:3px solid #D35400} .menu-items{display:flex;flex-direction:column;gap:20px} .menu-item{background:#fff;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,.1);overflow:hidden;border-left:5px solid #D35400} .item-image img{width:100%;height:160px;object-fit:contain} .item-content{padding:18px} .item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px} .item-name{font-weight:700} .item-price{background:#D35400;color:#fff;padding:6px 12px;border-radius:20px;font-weight:700} .footer{margin-top:30px;padding:20px;background:linear-gradient(135deg,rgba(243,156,18,.9),rgba(211,84,0,.9));margin:30px -25px -30px -25px;color:#fff;text-align:center} .cart-icon{position:fixed;top:20px;right:20px;background:#D35400;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:999} .cart-count{position:absolute;top:-5px;right:-5px;background:#E74C3C;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em}
-.cart-container{position:fixed;top:20px;right:20px;background:#fff;border-radius:15px;padding:15px;width:300px;max-height:80vh;overflow-y:auto;z-index:1000;display:none}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
-.modal-content{background:#fff;padding:25px;border-radius:15px;width:90%;max-width:400px}
-.loading{display:none;color:#D35400;font-weight:700}
-.debug-info{display:none;background:#f8f9fa;border:1px solid #dee2e6;padding:10px;border-radius:6px;margin-top:10px;font-size:.9em}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.cardapio-container {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.12;
+    z-index: 1;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+    padding: 30px 25px;
+}
+
+.header {
+    min-height: 120px;
+    background: linear-gradient(135deg, #f39c12, #d35400);
+    margin: -30px -25px 30px -25px;
+    padding: 30px 25px;
+    color: #fff;
+    border-bottom: 3px solid #D35400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-item {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-left: 5px solid #D35400;
+}
+
+.item-image img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.item-content {
+    padding: 18px;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.item-name {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.item-price {
+    background: #D35400;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.item-description {
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.cart-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.quantity-btn.minus {
+    background: #e74c3c;
+}
+
+.quantity-display {
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+.add-to-cart-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.footer {
+    margin-top: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.9), rgba(211, 84, 0, 0.9));
+    margin: 30px -25px -30px -25px;
+    color: #fff;
+    text-align: center;
+}
+
+.footer-text {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.contact {
+    font-size: 0.9rem;
+}
+
+.cart-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #D35400;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    font-size: 1.2rem;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #E74C3C;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.cart-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid #D35400;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.cart-title {
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.cart-item-price {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.cart-item-quantity {
+    background: #3498db;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.cart-total {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #D35400;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.checkout-btn {
+    width: 100%;
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-title {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.loading {
+    display: none;
+    color: #D35400;
+    font-weight: 700;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.debug-info {
+    display: none;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.cancel-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.submit-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.whatsapp-option {
+    width: 100%;
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 1rem;
+}
 </style>
 </head>
 <body>
 <div class="cardapio-container">
-  <div class="background-image"><img src="img/bg-sites.png" alt="bg" class="background-image"/></div>
+  <img src="img/bg-sites.png" alt="bg" class="background-image"/>
   <div class="content">
-    <div class="header"></div>
+    <div class="header">
+      <h1>EL TORO BRAVO</h1>
+    </div>
 
     <div class="menu-items">
-      <!-- Exemplo de item (adicione os demais como no arquivo original) -->
       <div class="menu-item">
-        <div class="item-image"><img src="img/crn.png" alt="El Toro Bravo"/></div>
+        <div class="item-image">
+          <img src="img/crn.png" alt="El Toro Bravo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWNmMGYxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzJjM2U1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVsIFRvcm8gQnJhdm88L3RleHQ+PC9zdmc+'"/>
+        </div>
         <div class="item-content">
-          <div class="item-header"><h3 class="item-name">EL TORO BRAVO</h3><span class="item-price">R$ 14,00</span></div>
+          <div class="item-header">
+            <h3 class="item-name">EL TORO BRAVO</h3>
+            <span class="item-price">R$ 14,00</span>
+          </div>
           <p class="item-description">Suculentos cubos de carne bovina, marinados em especiarias mexicanas.</p>
           <div class="cart-controls">
             <div class="quantity-controls">
@@ -37,7 +446,8 @@
           </div>
         </div>
       </div>
-      <!-- ... demais itens ... -->
+      
+      <!-- Adicione mais itens do cardápio aqui seguindo o mesmo padrão -->
     </div>
 
     <div class="footer">
@@ -48,8 +458,12 @@
 </div>
 
 <div class="cart-icon">🛒<span class="cart-count">0</span></div>
+
 <div class="cart-container">
-  <div class="cart-header"><h3 class="cart-title">Seu Pedido</h3><button class="close-cart">×</button></div>
+  <div class="cart-header">
+    <h3 class="cart-title">Seu Pedido</h3>
+    <button class="close-cart">×</button>
+  </div>
   <div class="cart-items"></div>
   <div class="cart-total">Total: R$ <span class="total-value">0,00</span></div>
   <button class="checkout-btn">Finalizar Pedido</button>
@@ -58,28 +472,37 @@
 <div class="modal" id="customerModal">
   <div class="modal-content">
     <h3 class="modal-title">Informações para Entrega</h3>
-    <div class="form-group"><label for="customerName">Nome</label><input id="customerName" type="text" placeholder="Seu nome completo"/></div>
-    <div class="form-group"><label for="customerPhone">Telefone</label><input id="customerPhone" type="tel" placeholder="(15) 98831-1590"/></div>
-    <div class="form-group"><label for="customerAddress">Endereço</label><input id="customerAddress" type="text" placeholder="Endereço completo"/></div>
+    <div class="form-group">
+      <label for="customerName">Nome</label>
+      <input id="customerName" type="text" placeholder="Seu nome completo"/>
+    </div>
+    <div class="form-group">
+      <label for="customerPhone">Telefone</label>
+      <input id="customerPhone" type="tel" placeholder="(15) 98831-1590"/>
+    </div>
+    <div class="form-group">
+      <label for="customerAddress">Endereço</label>
+      <input id="customerAddress" type="text" placeholder="Endereço completo"/>
+    </div>
     <div class="loading" id="loadingIndicator">Enviando pedido...</div>
     <div class="debug-info" id="debugInfo"></div>
     <div class="modal-buttons">
       <button class="modal-btn cancel-btn" id="cancelOrder">Cancelar</button>
-      <button class="modal-btn submit-btn" id="submitOrder">Enviar para Notion</button>
+      <button class="modal-btn submit-btn" id="submitOrder">Enviar Pedido</button>
     </div>
     <button class="whatsapp-option" id="whatsappOption">📱 Enviar via WhatsApp</button>
   </div>
 </div>
 
 <script>
-/*
-  Versão com logs de diagnóstico (masking) para confirmar qual DATABASE_ID está sendo lido.
-  Substitua NOTION_API_KEY / DATABASE_ID pelas suas credenciais reais se desejar.
-*/
+// Configurações - ATUALIZE ESTES VALORES
+const NOTION_API_KEY = 'sua_chave_api_notion_aqui';
+const DATABASE_ID = 'seu_database_id_aqui';
 
-let cart = {}; let cartTotal = 0;
+let cart = {};
+let cartTotal = 0;
 
-/* DOM */
+// Elementos DOM
 const cartIcon = document.querySelector('.cart-icon');
 const cartContainer = document.querySelector('.cart-container');
 const closeCartBtn = document.querySelector('.close-cart');
@@ -94,193 +517,162 @@ const whatsappOption = document.getElementById('whatsappOption');
 const loadingIndicator = document.getElementById('loadingIndicator');
 const debugInfo = document.getElementById('debugInfo');
 
-/* CREDENCIAIS (substitua conforme seu ambiente) */
-const NOTION_API_KEY = 'secret_ntn_499935262761FCXqjijRcDhFZNQDyQwzOkoVALCuWVSeXe';
-const DATABASE_ID = '29bba3d8ac0480aba4c0ccfc43b250ba';
-
-/* Função para mascarar valores no console (mostra apenas primeiros 6 e últimos 4 chars) */
-function maskValue(v){
-  if(!v) return '(vazio)';
-  if(v.length <= 10) return v;
-  return v.slice(0,6) + '…' + v.slice(-4);
-}
-
-/* Função de debug visual */
-function showDebugInfo(message, type='info'){
-  debugInfo.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
-  debugInfo.style.display = 'block';
-  debugInfo.style.background = type==='error' ? '#ffe6e6' : type==='success' ? '#e6ffe6' : '#f0f8ff';
-  debugInfo.style.borderColor = type==='error' ? '#ffcccc' : '#cce5ff';
-  console.log(`[DEBUG] ${type}: ${message}`);
-}
-
-/* LOGS DE CHECK (essencial para confirmar qual arquivo foi carregado) */
-console.log('CONFIG CHECK: NOTION_API_KEY (masked):', maskValue(NOTION_API_KEY));
-console.log('CONFIG CHECK: DATABASE_ID (masked):', maskValue(DATABASE_ID));
-showDebugInfo('Sistema carregado. Veja console para CONFIG CHECK.', 'info');
-
-/* Funções do carrinho */
-function updateCartDisplay(){
-  const totalItems = Object.values(cart).reduce((s,i)=>s+i.quantity,0);
-  cartCountElement.textContent = totalItems;
-  cartItemsContainer.innerHTML = '';
-  cartTotal = 0;
-  Object.keys(cart).forEach(name=>{
-    const i = cart[name];
-    const itemTotal = i.price * i.quantity;
-    cartTotal += itemTotal;
-    const el = document.createElement('div');
-    el.className = 'cart-item';
-    el.innerHTML = `<div class="cart-item-info"><div class="cart-item-name">${name}</div><div class="cart-item-price">R$ ${i.price.toFixed(2)}</div></div>
-                    <div class="cart-item-quantity"><span>${i.quantity}x</span></div>`;
-    cartItemsContainer.appendChild(el);
-  });
-  totalValueElement.textContent = cartTotal.toFixed(2).replace('.',',');
-}
-
-function addToCart(itemName, price){
-  if(cart[itemName]) cart[itemName].quantity++;
-  else cart[itemName] = { price: parseFloat(price), quantity: 1 };
-  updateCartDisplay();
-}
-
-/* Eventos básicos (quantidade / adicionar) — manteva implementação simples */
-document.addEventListener('click', function(e){
-  if(e.target.classList.contains('quantity-btn')){
-    const item = e.target.getAttribute('data-item');
-    const disp = document.querySelector(`.quantity-display[data-item="${item}"]`);
-    let q = parseInt(disp.textContent || '0');
-    if(e.target.classList.contains('plus')) q++;
-    else if(e.target.classList.contains('minus') && q>0) q--;
-    disp.textContent = q;
-  }
-  if(e.target.classList.contains('add-to-cart-btn')){
-    const name = e.target.getAttribute('data-item');
-    const price = e.target.getAttribute('data-price');
-    const disp = document.querySelector(`.quantity-display[data-item="${name}"]`);
-    const q = parseInt(disp.textContent||'0');
-    if(q>0) for(let i=0;i<q;i++) addToCart(name, price);
-  }
-});
-
-/* Eventos UI */
-cartIcon.onclick = ()=> cartContainer.style.display='block';
-closeCartBtn.onclick = ()=> cartContainer.style.display='none';
-checkoutBtn.onclick = ()=> {
-  if(Object.keys(cart).length===0){ alert('Seu carrinho está vazio!'); return; }
-  customerModal.style.display='flex';
-  debugInfo.style.display='none';
-};
-cancelOrderBtn.onclick = ()=> customerModal.style.display='none';
-
-/* Função robusta para envio ao Notion */
-async function sendOrderToNotion(name, phone, address){
-  loadingIndicator.style.display='block';
-  submitOrderBtn.disabled=true;
-  try {
-    showDebugInfo('Iniciando envio para Notion...', 'info');
-
-    // Verificações seguras (sem lançar a string antiga)
-    if(!NOTION_API_KEY || !NOTION_API_KEY.startsWith('secret_')){
-      throw new Error('Chave API do Notion inválida ou ausente. Verifique NOTION_API_KEY.');
-    }
-    if(!DATABASE_ID || typeof DATABASE_ID !== 'string' || DATABASE_ID.trim().length < 10){
-      throw new Error('Database ID do Notion ausente ou inválido. Verifique DATABASE_ID.');
-    }
-
-    // Log de diagnóstico para confirmar (mascarado)
-    console.log('CONFIG CHECK (runtime): DATABASE_ID =', maskValue(DATABASE_ID));
-
-    const orderItems = Object.keys(cart).map(k=>{
-      const it = cart[k];
-      return `${k} (${it.quantity}x) - R$ ${(it.price*it.quantity).toFixed(2)}`;
-    }).join('\n');
-
-    const body = {
-      parent: { database_id: DATABASE_ID },
-      properties: {
-        Nome: { title: [{ text: { content: name.substring(0,2000) } }] },
-        Telefone: { rich_text: [{ text: { content: phone.substring(0,2000) } }] },
-        Endereço: { rich_text: [{ text: { content: address.substring(0,2000) } }] },
-        Itens: { rich_text: [{ text: { content: orderItems.substring(0,2000) } }] },
-        Total: { number: parseFloat(cartTotal.toFixed(2)) },
-        Status: { select: { name: 'Novo Pedido' } }
-      }
-    };
-
-    // Envia direto para a API do Notion
-    const res = await fetch('https://api.notion.com/v1/pages', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${NOTION_API_KEY}`,
-        'Content-Type': 'application/json',
-        'Notion-Version': '2022-06-28'
-      },
-      body: JSON.stringify(body)
+// Funções do Carrinho
+function updateCartDisplay() {
+    const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+    cartCountElement.textContent = totalItems;
+    cartItemsContainer.innerHTML = '';
+    cartTotal = 0;
+    
+    Object.keys(cart).forEach(itemName => {
+        const item = cart[itemName];
+        const itemTotal = item.price * item.quantity;
+        cartTotal += itemTotal;
+        
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'cart-item';
+        cartItemElement.innerHTML = `
+            <div class="cart-item-info">
+                <div class="cart-item-name">${itemName}</div>
+                <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+            </div>
+            <div class="cart-item-quantity">
+                <span>${item.quantity}x</span>
+            </div>
+        `;
+        cartItemsContainer.appendChild(cartItemElement);
     });
+    
+    totalValueElement.textContent = cartTotal.toFixed(2).replace('.', ',');
+}
 
-    console.log('Notion API response status:', res.status);
-    if(res.ok){
-      const json = await res.json();
-      showDebugInfo('Pedido enviado com sucesso ao Notion!', 'success');
-      alert('🎉 Pedido enviado com sucesso!');
-      cart = {}; updateCartDisplay(); customerModal.style.display='none';
-      document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; document.getElementById('customerAddress').value='';
+function addToCart(itemName, price) {
+    if (cart[itemName]) {
+        cart[itemName].quantity++;
     } else {
-      const text = await res.text();
-      showDebugInfo(`Erro Notion ${res.status}: ${text}`, 'error');
-      // não lançamos a string antiga — fornecemos mensagem clara
-      if(res.status === 401) throw new Error('401 - Autenticação inválida (verifique NOTION_API_KEY).');
-      if(res.status === 403) throw new Error('403 - Sem permissão (verifique acesso ao database).');
-      if(res.status === 404) throw new Error('404 - Database não encontrado (verifique DATABASE_ID).');
-      throw new Error(`Erro Notion ${res.status}: ${text}`);
+        cart[itemName] = {
+            price: parseFloat(price),
+            quantity: 1
+        };
     }
-
-  } catch(err){
-    console.error('Erro no sendOrderToNotion:', err);
-    showDebugInfo(err.message, 'error');
-
-    // fallback amigável
-    if(confirm('Não foi possível enviar para o Notion. Deseja enviar via WhatsApp?')) {
-      sendOrderToWhatsApp(name, phone, address);
-    }
-  } finally {
-    loadingIndicator.style.display='none';
-    submitOrderBtn.disabled=false;
-  }
+    updateCartDisplay();
 }
 
-/* WhatsApp fallback (mesma lógica) */
-function sendOrderToWhatsApp(name, phone, address){
-  const items = Object.keys(cart).map(k=>{
-    const i = cart[k];
-    return `${k} (${i.quantity}x) - R$ ${(i.price*i.quantity).toFixed(2)}`;
-  }).join('%0A');
-  const total = cartTotal.toFixed(2).replace('.',',');
-  const msg = `*🛵 NOVO PEDIDO - SOROCABANOS*%0A%0A👤 ${name}%0A📞 ${phone}%0A🏠 ${address}%0A%0A${items}%0A%0A*TOTAL: R$ ${total}*`;
-  window.open(`https://wa.me/5515988311590?text=${msg}`, '_blank');
-  cart = {}; updateCartDisplay(); customerModal.style.display='none';
-  document.getElementById('customerName').value=''; document.getElementById('customerPhone').value=''; document.getElementById('customerAddress').value='';
+// Event Listeners
+document.addEventListener('click', function(e) {
+    // Controles de quantidade
+    if (e.target.classList.contains('quantity-btn')) {
+        const itemName = e.target.getAttribute('data-item');
+        const display = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
+        let quantity = parseInt(display.textContent) || 0;
+        
+        if (e.target.classList.contains('plus')) {
+            quantity++;
+        } else if (e.target.classList.contains('minus') && quantity > 0) {
+            quantity--;
+        }
+        
+        display.textContent = quantity;
+    }
+    
+    // Adicionar ao carrinho
+    if (e.target.classList.contains('add-to-cart-btn')) {
+        const itemName = e.target.getAttribute('data-item');
+        const price = e.target.getAttribute('data-price');
+        const display = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
+        const quantity = parseInt(display.textContent) || 0;
+        
+        if (quantity > 0) {
+            for (let i = 0; i < quantity; i++) {
+                addToCart(itemName, price);
+            }
+            // Reset quantity display
+            display.textContent = '0';
+        } else {
+            alert('Selecione a quantidade primeiro!');
+        }
+    }
+});
+
+// Carrinho UI
+cartIcon.addEventListener('click', () => {
+    cartContainer.style.display = 'block';
+});
+
+closeCartBtn.addEventListener('click', () => {
+    cartContainer.style.display = 'none';
+});
+
+checkoutBtn.addEventListener('click', () => {
+    if (Object.keys(cart).length === 0) {
+        alert('Seu carrinho está vazio!');
+        return;
+    }
+    customerModal.style.display = 'flex';
+});
+
+cancelOrderBtn.addEventListener('click', () => {
+    customerModal.style.display = 'none';
+});
+
+// Função para enviar via WhatsApp (fallback)
+function sendOrderToWhatsApp(name, phone, address) {
+    const items = Object.keys(cart).map(itemName => {
+        const item = cart[itemName];
+        return `${itemName} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`;
+    }).join('%0A');
+    
+    const total = cartTotal.toFixed(2).replace('.', ',');
+    const message = `*🛵 NOVO PEDIDO - SOROCABANOS*%0A%0A👤 ${name}%0A📞 ${phone}%0A🏠 ${address}%0A%0A*ITENS:*%0A${items}%0A%0A*TOTAL: R$ ${total}*`;
+    
+    window.open(`https://wa.me/5515988311590?text=${message}`, '_blank');
+    
+    // Limpar carrinho após envio
+    cart = {};
+    updateCartDisplay();
+    customerModal.style.display = 'none';
+    
+    // Limpar formulário
+    document.getElementById('customerName').value = '';
+    document.getElementById('customerPhone').value = '';
+    document.getElementById('customerAddress').value = '';
 }
 
-/* Handlers do modal */
-document.getElementById('submitOrder').addEventListener('click', ()=>{
-  const n = document.getElementById('customerName').value;
-  const p = document.getElementById('customerPhone').value;
-  const a = document.getElementById('customerAddress').value;
-  if(!n||!p||!a) return alert('Por favor preencha todas as informações!');
-  sendOrderToNotion(n,p,a);
-});
-document.getElementById('whatsappOption').addEventListener('click', ()=>{
-  const n=document.getElementById('customerName').value;
-  const p=document.getElementById('customerPhone').value;
-  const a=document.getElementById('customerAddress').value;
-  if(!n||!p||!a) return alert('Preencha tudo antes de enviar via WhatsApp!');
-  sendOrderToWhatsApp(n,p,a);
+// Enviar pedido
+submitOrderBtn.addEventListener('click', () => {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const address = document.getElementById('customerAddress').value.trim();
+    
+    if (!name || !phone || !address) {
+        alert('Por favor, preencha todas as informações!');
+        return;
+    }
+    
+    // Usar WhatsApp como fallback por enquanto
+    sendOrderToWhatsApp(name, phone, address);
 });
 
-/* Debug final */
-showDebugInfo('Sistema pronto — verifique console para CONFIG CHECK (masked).','info');
+whatsappOption.addEventListener('click', () => {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const address = document.getElementById('customerAddress').value.trim();
+    
+    if (!name || !phone || !address) {
+        alert('Preencha todas as informações antes de enviar via WhatsApp!');
+        return;
+    }
+    
+    sendOrderToWhatsApp(name, phone, address);
+});
+
+// Inicialização
+updateCartDisplay();
+console.log('Sistema de cardápio carregado com sucesso!');
+
+// Mostrar informações de debug
+debugInfo.innerHTML = 'Sistema carregado. Configure NOTION_API_KEY e DATABASE_ID para usar integração com Notion.';
+debugInfo.style.display = 'block';
 </script>
 </body>
 </html>
