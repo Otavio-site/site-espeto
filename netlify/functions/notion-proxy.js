@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Método não permitido" };
@@ -18,6 +16,7 @@ export async function handler(event) {
   try {
     const data = JSON.parse(event.body);
 
+    // Aqui usamos o fetch nativo do Node 18+ (sem import)
     const notionResponse = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers: {
