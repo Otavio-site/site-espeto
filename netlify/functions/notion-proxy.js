@@ -16,7 +16,7 @@ export async function handler(event) {
   try {
     const data = JSON.parse(event.body);
 
-    // Aqui usamos o fetch nativo do Node 18+ (sem import)
+    // Usa fetch nativo do Node 18+ (sem import de node-fetch)
     const notionResponse = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
       headers: {
