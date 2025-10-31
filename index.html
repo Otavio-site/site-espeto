@@ -5,50 +5,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kanban Notion Integration</title>
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f6f8fa; margin: 0; padding: 0; }
-    header { background-color: #24292e; color: white; text-align: center; padding: 1rem 0; }
-    main { max-width: 900px; margin: 2rem auto; background-color: white; padding: 2rem;
-           border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-    input, select, textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    button { background-color: #2ea44f; color: white; padding: 0.75rem 1.5rem; border: none;
-             border-radius: 6px; cursor: pointer; font-size: 1rem; }
-    button:hover { background-color: #22863a; }
-    .log { margin-top: 2rem; background: #f0f0f0; padding: 1rem; border-radius: 6px; font-family: monospace;
-           max-height: 200px; overflow-y: auto; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f8fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #24292e;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #2ea44f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #22863a;
+    }
+    .log {
+      margin-top: 2rem;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
-  <header><h1>Integração Kanban Notion</h1></header>
+  <header>
+    <h1>Integração Kanban Notion</h1>
+  </header>
   <main>
-    <h2>Informações para Entrega</h2>
+    <h2>Nova Tarefa</h2>
     <form id="kanbanForm">
-      <div class="form-group"><label for="titulo">Nome</label>
-        <input type="text" id="titulo" placeholder="Primeiro nome" required />
-      </div>
-      <div class="form-group"><label for="descricao">Telefone</label>
-        <input id="customerPhone" type="tel" placeholder="(00) 00000-0000"/>
-      </div>
       <div class="form-group">
-      <label for="customerAddress">Endereço</label>
-      <input id="customerAddress" type="text" placeholder="Endereço completo"/>
-    </div>
-    <div class="loading" id="loadingIndicator">Enviando pedido...</div>
-    <div class="debug-info" id="debugInfo"></div>
-    <div class="modal-buttons">
-      <button class="modal-btn cancel-btn" id="cancelOrder">Cancelar</button>
-      <button class="modal-btn submit-btn" id="submitOrder">Enviar Pedido</button>
-    </div>
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" placeholder="Título da tarefa" required />
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" placeholder="Descreva a tarefa..." rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="A Fazer">A Fazer</option>
+          <option value="Em Progresso">Em Progresso</option>
+          <option value="Concluído">Concluído</option>
         </select>
       </div>
+
       <button type="submit">Enviar para Notion</button>
     </form>
+
     <div class="log" id="log"></div>
   </main>
 
   <script>
     const logBox = document.getElementById("log");
+
     function log(message, type = "info") {
       const color = type === "error" ? "red" : type === "success" ? "green" : "black";
       const entry = document.createElement("div");
@@ -61,32 +109,55 @@
 
     document.getElementById("kanbanForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const titulo = document.getElementById("titulo").value.trim();
       const descricao = document.getElementById("descricao").value.trim();
       const status = document.getElementById("status").value;
-      if (!titulo) { log("O título é obrigatório.", "error"); return; }
+
+      if (!titulo) {
+        log("O título é obrigatório.", "error");
+        return;
+      }
 
       const properties = {
-        "Nome": { "title": [{ "text": { "content": titulo } }] },
-        "Descrição": { "rich_text": [{ "text": { "content": descricao || "" } }] },
-        "Status": { "select": { "name": status } }
+        "Nome": {
+          "title": [{ "text": { "content": titulo } }]
+        },
+        "Descrição": {
+          "rich_text": [{ "text": { "content": descricao || "" } }]
+        },
+        "Status": {
+          "select": { "name": status }
+        }
       };
 
       try {
         log("Iniciando envio para Notion...", "info");
+
         const response = await fetch("/api/notion-proxy", {
-          method: "POST", headers: { "Content-Type": "application/json" },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ properties })
         });
+
         const result = await response.json();
-        if (!response.ok) { log(`Erro ao enviar: ${result.message || JSON.stringify(result)}`, "error"); return; }
-        log("Tarefa enviada com sucesso!", "success");
+
+        if (!response.ok) {
+          log(`Erro ao enviar para Notion: ${result.message || JSON.stringify(result)}`, "error");
+          return;
+        }
+
+        log("Tarefa enviada com sucesso para o Notion!", "success");
         document.getElementById("kanbanForm").reset();
-      } catch (error) { log(`Erro completo: ${error.message}`, "error"); }
+
+      } catch (error) {
+        log(`Erro completo: ${error.message}`, "error");
+      }
     });
 
+    // Debug inicial
     console.log("%c[INFO]", "color: green; font-weight: bold;", "Integração com Notion ativa via Netlify Proxy.");
-    console.log("%c[DEBUG]", "color: gray;", "Configure NOTION_API_KEY e DATABASE_ID no painel do Netlify.");
+    console.log("%c[DEBUG]", "color: gray;", "Certifique-se de ter configurado as variáveis NOTION_API_KEY e DATABASE_ID no painel do Netlify.");
   </script>
 </body>
 </html>
