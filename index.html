@@ -1,678 +1,163 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Cardápio Sorocabanos</title>
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.cardapio-container {
-    position: relative;
-    width: 100%;
-    max-width: 450px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.background-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.12;
-    z-index: 1;
-}
-
-.content {
-    position: relative;
-    z-index: 2;
-    padding: 30px 25px;
-}
-
-.header {
-    min-height: 120px;
-    background: linear-gradient(135deg, #f39c12, #d35400);
-    margin: -30px -25px 30px -25px;
-    padding: 30px 25px;
-    color: #fff;
-    border-bottom: 3px solid #D35400;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.header h1 {
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-.menu-items {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.menu-item {
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    border-left: 5px solid #D35400;
-}
-
-.item-image img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-}
-
-.item-content {
-    padding: 18px;
-}
-
-.item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-}
-
-.item-name {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #2c3e50;
-}
-
-.item-price {
-    background: #D35400;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-.item-description {
-    color: #7f8c8d;
-    margin-bottom: 15px;
-    line-height: 1.4;
-}
-
-.cart-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.quantity-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.quantity-btn.minus {
-    background: #e74c3c;
-}
-
-.quantity-display {
-    font-weight: bold;
-    min-width: 20px;
-    text-align: center;
-}
-
-.add-to-cart-btn {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.footer {
-    margin-top: 30px;
-    padding: 20px;
-    background: linear-gradient(135deg, rgba(243, 156, 18, 0.9), rgba(211, 84, 0, 0.9));
-    margin: 30px -25px -30px -25px;
-    color: #fff;
-    text-align: center;
-}
-
-.footer-text {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.contact {
-    font-size: 0.9rem;
-}
-
-.cart-icon {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #D35400;
-    color: #fff;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-    z-index: 999;
-    font-size: 1.2rem;
-}
-
-.cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #E74C3C;
-    color: #fff;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8em;
-    font-weight: bold;
-}
-
-.cart-container {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    background: #fff;
-    border-radius: 15px;
-    padding: 15px;
-    width: 300px;
-    max-height: 80vh;
-    overflow-y: auto;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 2px solid #D35400;
-}
-
-.cart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #ecf0f1;
-}
-
-.cart-title {
-    color: #2c3e50;
-    font-size: 1.3rem;
-}
-
-.close-cart {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #7f8c8d;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #ecf0f1;
-}
-
-.cart-item-info {
-    flex: 1;
-}
-
-.cart-item-name {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.cart-item-price {
-    color: #7f8c8d;
-    font-size: 0.9rem;
-}
-
-.cart-item-quantity {
-    background: #3498db;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-weight: bold;
-}
-
-.cart-total {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px solid #D35400;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: center;
-    color: #2c3e50;
-}
-
-.checkout-btn {
-    width: 100%;
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-top: 15px;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: #fff;
-    padding: 25px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.modal-title {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 1.4rem;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #bdc3c7;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
-.form-group input:focus {
-    border-color: #3498db;
-    outline: none;
-}
-
-.loading {
-    display: none;
-    color: #D35400;
-    font-weight: 700;
-    text-align: center;
-    margin: 15px 0;
-}
-
-.debug-info {
-    display: none;
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    padding: 10px;
-    border-radius: 6px;
-    margin-top: 10px;
-    font-size: 0.9em;
-}
-
-.modal-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.modal-btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.cancel-btn {
-    background: #e74c3c;
-    color: white;
-}
-
-.submit-btn {
-    background: #27ae60;
-    color: white;
-}
-
-.whatsapp-option {
-    width: 100%;
-    background: #25D366;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-    font-size: 1rem;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban Notion Integration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f8fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #24292e;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #2ea44f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #22863a;
+    }
+    .log {
+      margin-top: 2rem;
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
 </head>
 <body>
-<div class="cardapio-container">
-  <img src="img/bg-sites.png" alt="bg" class="background-image"/>
-  <div class="content">
-    <div class="header">
-      <h1>EL TORO BRAVO</h1>
-    </div>
-
-    <div class="menu-items">
-      <div class="menu-item">
-        <div class="item-image">
-          <img src="img/crn.png" alt="El Toro Bravo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWNmMGYxIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzJjM2U1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVsIFRvcm8gQnJhdm88L3RleHQ+PC9zdmc+'"/>
-        </div>
-        <div class="item-content">
-          <div class="item-header">
-            <h3 class="item-name">EL TORO BRAVO</h3>
-            <span class="item-price">R$ 14,00</span>
-          </div>
-          <p class="item-description">Suculentos cubos de carne bovina, marinados em especiarias mexicanas.</p>
-          <div class="cart-controls">
-            <div class="quantity-controls">
-              <button class="quantity-btn minus" data-item="EL TORO BRAVO">-</button>
-              <span class="quantity-display" data-item="EL TORO BRAVO">0</span>
-              <button class="quantity-btn plus" data-item="EL TORO BRAVO">+</button>
-            </div>
-            <button class="add-to-cart-btn" data-item="EL TORO BRAVO" data-price="14.00">Adicionar</button>
-          </div>
-        </div>
+  <header>
+    <h1>Integração Kanban Notion</h1>
+  </header>
+  <main>
+    <h2>Nova Tarefa</h2>
+    <form id="kanbanForm">
+      <div class="form-group">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" placeholder="Título da tarefa" required />
       </div>
-      
-      <!-- Adicione mais itens do cardápio aqui seguindo o mesmo padrão -->
-    </div>
 
-    <div class="footer">
-      <p class="footer-text">🌮 Cada espeto é uma celebração de sabores! 🌮</p>
-      <p class="contact">@sorocabanos_espetaria • (15) 98831-1590</p>
-    </div>
-  </div>
-</div>
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" placeholder="Descreva a tarefa..." rows="3"></textarea>
+      </div>
 
-<div class="cart-icon">🛒<span class="cart-count">0</span></div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status">
+          <option value="A Fazer">A Fazer</option>
+          <option value="Em Progresso">Em Progresso</option>
+          <option value="Concluído">Concluído</option>
+        </select>
+      </div>
 
-<div class="cart-container">
-  <div class="cart-header">
-    <h3 class="cart-title">Seu Pedido</h3>
-    <button class="close-cart">×</button>
-  </div>
-  <div class="cart-items"></div>
-  <div class="cart-total">Total: R$ <span class="total-value">0,00</span></div>
-  <button class="checkout-btn">Finalizar Pedido</button>
-</div>
+      <button type="submit">Enviar para Notion</button>
+    </form>
 
-<div class="modal" id="customerModal">
-  <div class="modal-content">
-    <h3 class="modal-title">Informações para Entrega</h3>
-    <div class="form-group">
-      <label for="customerName">Nome</label>
-      <input id="customerName" type="text" placeholder="Seu nome completo"/>
-    </div>
-    <div class="form-group">
-      <label for="customerPhone">Telefone</label>
-      <input id="customerPhone" type="tel" placeholder="(15) 98831-1590"/>
-    </div>
-    <div class="form-group">
-      <label for="customerAddress">Endereço</label>
-      <input id="customerAddress" type="text" placeholder="Endereço completo"/>
-    </div>
-    <div class="loading" id="loadingIndicator">Enviando pedido...</div>
-    <div class="debug-info" id="debugInfo"></div>
-    <div class="modal-buttons">
-      <button class="modal-btn cancel-btn" id="cancelOrder">Cancelar</button>
-      <button class="modal-btn submit-btn" id="submitOrder">Enviar Pedido</button>
-    </div>
-    <button class="whatsapp-option" id="whatsappOption">📱 Enviar via WhatsApp</button>
-  </div>
-</div>
+    <div class="log" id="log"></div>
+  </main>
 
-<script>
-// Configurações - ATUALIZE ESTES VALORES
-const NOTION_API_KEY = 'secret_ntn_499935262769ZEOi2rxPJphZgTqReNmxj9H3coI7sFE3e9';
-const DATABASE_ID = '29bba3d8ac0480aba4c0ccfc43b250ba';
+  <script>
+    const logBox = document.getElementById("log");
 
-let cart = {};
-let cartTotal = 0;
+    function log(message, type = "info") {
+      const color = type === "error" ? "red" : type === "success" ? "green" : "black";
+      const entry = document.createElement("div");
+      entry.style.color = color;
+      entry.textContent = `[${type.toUpperCase()}] ${message}`;
+      logBox.appendChild(entry);
+      logBox.scrollTop = logBox.scrollHeight;
+      console.log(`%c[${type.toUpperCase()}]`, `color: ${color}; font-weight: bold;`, message);
+    }
 
-// Elementos DOM
-const cartIcon = document.querySelector('.cart-icon');
-const cartContainer = document.querySelector('.cart-container');
-const closeCartBtn = document.querySelector('.close-cart');
-const cartItemsContainer = document.querySelector('.cart-items');
-const totalValueElement = document.querySelector('.total-value');
-const cartCountElement = document.querySelector('.cart-count');
-const checkoutBtn = document.querySelector('.checkout-btn');
-const customerModal = document.getElementById('customerModal');
-const cancelOrderBtn = document.getElementById('cancelOrder');
-const submitOrderBtn = document.getElementById('submitOrder');
-const whatsappOption = document.getElementById('whatsappOption');
-const loadingIndicator = document.getElementById('loadingIndicator');
-const debugInfo = document.getElementById('debugInfo');
+    document.getElementById("kanbanForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-// Funções do Carrinho
-function updateCartDisplay() {
-    const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
-    cartCountElement.textContent = totalItems;
-    cartItemsContainer.innerHTML = '';
-    cartTotal = 0;
-    
-    Object.keys(cart).forEach(itemName => {
-        const item = cart[itemName];
-        const itemTotal = item.price * item.quantity;
-        cartTotal += itemTotal;
-        
-        const cartItemElement = document.createElement('div');
-        cartItemElement.className = 'cart-item';
-        cartItemElement.innerHTML = `
-            <div class="cart-item-info">
-                <div class="cart-item-name">${itemName}</div>
-                <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
-            </div>
-            <div class="cart-item-quantity">
-                <span>${item.quantity}x</span>
-            </div>
-        `;
-        cartItemsContainer.appendChild(cartItemElement);
+      const titulo = document.getElementById("titulo").value.trim();
+      const descricao = document.getElementById("descricao").value.trim();
+      const status = document.getElementById("status").value;
+
+      if (!titulo) {
+        log("O título é obrigatório.", "error");
+        return;
+      }
+
+      const properties = {
+        "Nome": {
+          "title": [{ "text": { "content": titulo } }]
+        },
+        "Descrição": {
+          "rich_text": [{ "text": { "content": descricao || "" } }]
+        },
+        "Status": {
+          "select": { "name": status }
+        }
+      };
+
+      try {
+        log("Iniciando envio para Notion...", "info");
+
+        const response = await fetch("/api/notion-proxy", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ properties })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          log(`Erro ao enviar para Notion: ${result.message || JSON.stringify(result)}`, "error");
+          return;
+        }
+
+        log("Tarefa enviada com sucesso para o Notion!", "success");
+        document.getElementById("kanbanForm").reset();
+
+      } catch (error) {
+        log(`Erro completo: ${error.message}`, "error");
+      }
     });
-    
-    totalValueElement.textContent = cartTotal.toFixed(2).replace('.', ',');
-}
 
-function addToCart(itemName, price) {
-    if (cart[itemName]) {
-        cart[itemName].quantity++;
-    } else {
-        cart[itemName] = {
-            price: parseFloat(price),
-            quantity: 1
-        };
-    }
-    updateCartDisplay();
-}
-
-// Event Listeners
-document.addEventListener('click', function(e) {
-    // Controles de quantidade
-    if (e.target.classList.contains('quantity-btn')) {
-        const itemName = e.target.getAttribute('data-item');
-        const display = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
-        let quantity = parseInt(display.textContent) || 0;
-        
-        if (e.target.classList.contains('plus')) {
-            quantity++;
-        } else if (e.target.classList.contains('minus') && quantity > 0) {
-            quantity--;
-        }
-        
-        display.textContent = quantity;
-    }
-    
-    // Adicionar ao carrinho
-    if (e.target.classList.contains('add-to-cart-btn')) {
-        const itemName = e.target.getAttribute('data-item');
-        const price = e.target.getAttribute('data-price');
-        const display = document.querySelector(`.quantity-display[data-item="${itemName}"]`);
-        const quantity = parseInt(display.textContent) || 0;
-        
-        if (quantity > 0) {
-            for (let i = 0; i < quantity; i++) {
-                addToCart(itemName, price);
-            }
-            // Reset quantity display
-            display.textContent = '0';
-        } else {
-            alert('Selecione a quantidade primeiro!');
-        }
-    }
-});
-
-// Carrinho UI
-cartIcon.addEventListener('click', () => {
-    cartContainer.style.display = 'block';
-});
-
-closeCartBtn.addEventListener('click', () => {
-    cartContainer.style.display = 'none';
-});
-
-checkoutBtn.addEventListener('click', () => {
-    if (Object.keys(cart).length === 0) {
-        alert('Seu carrinho está vazio!');
-        return;
-    }
-    customerModal.style.display = 'flex';
-});
-
-cancelOrderBtn.addEventListener('click', () => {
-    customerModal.style.display = 'none';
-});
-
-// Função para enviar via WhatsApp (fallback)
-function sendOrderToWhatsApp(name, phone, address) {
-    const items = Object.keys(cart).map(itemName => {
-        const item = cart[itemName];
-        return `${itemName} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}`;
-    }).join('%0A');
-    
-    const total = cartTotal.toFixed(2).replace('.', ',');
-    const message = `*🛵 NOVO PEDIDO - SOROCABANOS*%0A%0A👤 ${name}%0A📞 ${phone}%0A🏠 ${address}%0A%0A*ITENS:*%0A${items}%0A%0A*TOTAL: R$ ${total}*`;
-    
-    window.open(`https://wa.me/5515988311590?text=${message}`, '_blank');
-    
-    // Limpar carrinho após envio
-    cart = {};
-    updateCartDisplay();
-    customerModal.style.display = 'none';
-    
-    // Limpar formulário
-    document.getElementById('customerName').value = '';
-    document.getElementById('customerPhone').value = '';
-    document.getElementById('customerAddress').value = '';
-}
-
-// Enviar pedido
-submitOrderBtn.addEventListener('click', () => {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    const address = document.getElementById('customerAddress').value.trim();
-    
-    if (!name || !phone || !address) {
-        alert('Por favor, preencha todas as informações!');
-        return;
-    }
-    
-    // Usar WhatsApp como fallback por enquanto
-    sendOrderToWhatsApp(name, phone, address);
-});
-
-whatsappOption.addEventListener('click', () => {
-    const name = document.getElementById('customerName').value.trim();
-    const phone = document.getElementById('customerPhone').value.trim();
-    const address = document.getElementById('customerAddress').value.trim();
-    
-    if (!name || !phone || !address) {
-        alert('Preencha todas as informações antes de enviar via WhatsApp!');
-        return;
-    }
-    
-    sendOrderToWhatsApp(name, phone, address);
-});
-
-// Inicialização
-updateCartDisplay();
-console.log('Sistema de cardápio carregado com sucesso!');
-
-// Mostrar informações de debug
-debugInfo.innerHTML = 'Sistema carregado. Configure NOTION_API_KEY e DATABASE_ID para usar integração com Notion.';
-debugInfo.style.display = 'block';
-</script>
+    // Debug inicial
+    console.log("%c[INFO]", "color: green; font-weight: bold;", "Integração com Notion ativa via Netlify Proxy.");
+    console.log("%c[DEBUG]", "color: gray;", "Certifique-se de ter configurado as variáveis NOTION_API_KEY e DATABASE_ID no painel do Netlify.");
+  </script>
 </body>
 </html>
