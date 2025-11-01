@@ -1,0 +1,14 @@
+{
+  "name": "sorocabanos-site",
+  "version": "1.0.0",
+  "description": "Site do Sorocabanos Espetaria com integração Notion",
+  "scripts": {
+    "build": "echo 'No build step needed'"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

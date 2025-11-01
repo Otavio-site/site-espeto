@@ -1,58 +1,87 @@
-export async function handler(event) {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Método não permitido" };
-  }
+const fetch = require('node-fetch');
 
-  const NOTION_API_KEY = process.env.NOTION_API_KEY;
-  const DATABASE_ID = process.env.DATABASE_ID;
-
-  if (!NOTION_API_KEY || !DATABASE_ID) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Variáveis de ambiente não configuradas." }),
-    };
-  }
-
-  try {
-    const data = JSON.parse(event.body);
-
-    // Usa fetch nativo do Node 18+ (sem import de node-fetch)
-    const notionResponse = await fetch("https://api.notion.com/v1/pages", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${NOTION_API_KEY}`,
-        "Content-Type": "application/json",
-        "Notion-Version": "2022-06-28",
-      },
-      body: JSON.stringify({
-        parent: { database_id: DATABASE_ID },
-        properties: data.properties,
-      }),
-    });
-
-    const result = await notionResponse.json();
-
-    if (!notionResponse.ok) {
-      console.error("Erro ao enviar para Notion:", result);
-      return {
-        statusCode: notionResponse.status,
-        body: JSON.stringify(result),
-      };
+exports.handler = async function(event, context) {
+    console.log('🔧 FUNÇÃO NOTION-PROXY INICIADA');
+    
+    // DEBUG: Log das variáveis de ambiente
+    console.log('📋 Variáveis de ambiente disponíveis:');
+    console.log('NOTION_API_KEY:', process.env.NOTION_API_KEY ? '✅ CONFIGURADA' : '❌ NÃO CONFIGURADA');
+    console.log('NOTION_DATABASE_ID:', process.env.NOTION_DATABASE_ID ? '✅ CONFIGURADA' : '❌ NÃO CONFIGURADA');
+    
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            body: JSON.stringify({ error: 'Método não permitido' })
+        };
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-      body: JSON.stringify(result),
-    };
-  } catch (error) {
-    console.error("Erro interno:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
-  }
-}
+    try {
+        const NOTION_API_KEY = process.env.NOTION_API_KEY;
+        const DATABASE_ID = process.env.NOTION_DATABASE_ID;
+
+        // DEBUG mais detalhado
+        if (!NOTION_API_KEY) {
+            console.error('❌ NOTION_API_KEY está vazia ou indefinida');
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ 
+                    error: 'NOTION_API_KEY não configurada - Verifique as variáveis de ambiente no Netlify' 
+                })
+            };
+        }
+
+        if (!DATABASE_ID) {
+            console.error('❌ NOTION_DATABASE_ID está vazia ou indefinida');
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ 
+                    error: 'NOTION_DATABASE_ID não configurada - Verifique as variáveis de ambiente no Netlify' 
+                })
+            };
+        }
+
+        console.log('✅ Todas as variáveis de ambiente estão configuradas');
+        console.log('📦 Recebendo dados do pedido...');
+
+        const requestData = JSON.parse(event.body);
+        console.log('📝 Dados do pedido recebidos:', JSON.stringify(requestData, null, 2));
+        
+        const response = await fetch('https://api.notion.com/v1/pages', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${NOTION_API_KEY}`,
+                'Content-Type': 'application/json',
+                'Notion-Version': '2022-06-28'
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        console.log('📡 Resposta do Notion:', response.status, response.statusText);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ Erro do Notion API:', response.status, errorText);
+            return {
+                statusCode: response.status,
+                body: errorText
+            };
+        }
+
+        const result = await response.json();
+        console.log('✅ Pedido criado com sucesso no Notion');
+        
+        return {
+            statusCode: 200,
+            body: JSON.stringify(result)
+        };
+
+    } catch (error) {
+        console.error('❌ Erro na função notion-proxy:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ 
+                error: 'Erro interno: ' + error.message 
+            })
+        };
+    }
+};
